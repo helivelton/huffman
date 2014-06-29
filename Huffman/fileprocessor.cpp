@@ -31,8 +31,11 @@ int * FileProcessor::getFrequency(){
 
         QByteArray byteArray = file()->readAll();
 
-        int * frequencyArray = new int[256];
+        int * frequencyArray = new int[255];
+        for(int i = 0;i < 256; i++) frequencyArray[i]=0;
 
+
+        qDebug() << byteArray.size();
         for(int i = 0; i < byteArray.size(); i++){
             frequencyArray[byteArray[i]]++;
         }

@@ -1,9 +1,12 @@
 #include <QDebug>
 #include <fileprocessor.h>
+#include <hufftree.h>
 
 int main(int argc, char *argv[])
 {
-    FileProcessor fp("/home/paulinha/Documents/test.txt");
+
+
+    FileProcessor fp("C:/Users/Helivelton/UFAL/ESTRUTURA/teste3.txt");
     int * arr = fp.getFrequency();
 
     for(int i = 0; i < 256; i++){
@@ -11,5 +14,10 @@ int main(int argc, char *argv[])
         qDebug() << "'"<< ch << "'" << " <---> " << arr[i];
     }
 
+    HuffTree *arvore = new HuffTree(arr);
+
+    HuffNode * root = arvore->buildTree();
+
+    arvore->printTree();
 
 }
