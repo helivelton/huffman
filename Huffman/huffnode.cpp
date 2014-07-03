@@ -4,55 +4,55 @@ HuffNode::HuffNode()
 {
 }
 
-HuffNode::HuffNode(int freq, int caractere, HuffNode* leftChild, HuffNode* rightChild, bool isLeaf)
+HuffNode::HuffNode(int frequency, unsigned char character, HuffNode * leftChild, HuffNode * rightChild, bool isLeaf)
 {
-    m_freq = freq;
-    m_caractere = caractere;
+    m_frequency = frequency;
+    m_character = character;
     m_leftChild = leftChild;
     m_rightChild = rightChild;
     m_isLeaf = isLeaf;
 }
 
-HuffNode::HuffNode(int freq, int caractere, bool isLeaf)
+HuffNode::HuffNode(int frequency, unsigned char character, bool isLeaf)
 {
-    m_freq = freq;
-    m_caractere = caractere;
+    m_frequency = frequency;
+    m_character = character;
     m_isLeaf = isLeaf;
 }
 
-int HuffNode::getCaractere()
+unsigned char HuffNode::character()
 {
-    return m_caractere;
+    return m_character;
 }
 
-int HuffNode::getFreq()
+int HuffNode::frequency()
 {
-    return m_freq;
+    return m_frequency;
 }
 
-HuffNode * HuffNode::getLeft()
+HuffNode * HuffNode::leftChild()
 {
     return m_leftChild;
 }
 
-HuffNode * HuffNode::getRight()
+HuffNode * HuffNode::rightChild()
 {
     return m_rightChild;
 }
 
 bool HuffNode::isLeaf()
 {
-   return m_isLeaf;
+    return m_isLeaf;
 }
 
-void HuffNode::setCaractere(int caractere)
+void HuffNode::setCharacter(unsigned char character)
 {
-    m_caractere = caractere;
+    m_character = character;
 }
 
-void HuffNode::setFreq(int freq)
+void HuffNode::setFrequency(int frequency)
 {
-    m_freq = freq;
+    m_frequency = frequency;
 }
 
 void HuffNode::setIsLeaf(bool isLeaf)
@@ -71,26 +71,26 @@ void HuffNode::setRightChild(HuffNode *node)
 }
 
 
-HuffNode * HuffNode::comparar(HuffNode *a, HuffNode *b)
+HuffNode * HuffNode::compare(HuffNode *a, HuffNode *b)
 {
-    if(a->getFreq()<b->getFreq())
+    if(a->frequency() < b->frequency())
     {
         return a;
     }else
+    {
+        if(b->frequency() < a->frequency())
         {
-            if(b->getFreq()<a->getFreq())
+            return b;
+        }else
+        {
+            if(a->character() < b->character())
+            {
+                return a;
+            }else
             {
                 return b;
-            }else
-                {
-                    if(a->getCaractere()<b->getCaractere())
-                    {
-                        return a;
-                    }else
-                    {
-                        return b;
-                    }
-                }
-
+            }
         }
+
+    }
 }

@@ -1,6 +1,6 @@
 #ifndef HUFFTREE_H
 #define HUFFTREE_H
-#include <HuffNode.h>
+#include <huffnode.h>
 #include <QDebug>
 #include <QList>
 
@@ -10,10 +10,11 @@ public:
     HuffTree();
     HuffTree(int * frequencyArray);
     HuffNode * buildTree();
-    HuffNode* comparar(HuffNode * a, HuffNode * b); //retorna o Huffnode com menor peso
-    QList<HuffNode*> ordenarLista(QList<HuffNode*> lista);
+    HuffNode* compare(HuffNode * a, HuffNode * b); //retorna o Huffnode com menor peso
+    QList<HuffNode*> sortList(QList<HuffNode*> list);
     void printTree();
-    bool reachedDeep(QList<HuffNode*> lista);
+    bool reachedDeep(QList<HuffNode*> list);
+
 private:
     HuffNode * m_root;
     int * m_frequencyArray;

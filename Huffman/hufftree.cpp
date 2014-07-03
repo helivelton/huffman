@@ -7,7 +7,7 @@ HuffTree::HuffTree()
 {
 }
 
-HuffTree::HuffTree(int *frequencyArray)
+HuffTree::HuffTree(int * frequencyArray)
 {
     m_frequencyArray = frequencyArray;
 }
@@ -15,83 +15,82 @@ HuffTree::HuffTree(int *frequencyArray)
 
 HuffNode * HuffTree::buildTree()
 {
-
-
-    QList<HuffNode*> lista = QList<HuffNode*>();
+    QList<HuffNode*> list = QList<HuffNode*>();
 
 
     for(int i=0; i<256;i++)
     {
-        if(m_frequencyArray[i]>0)
+        if(m_frequencyArray[i] > 0)
         {
             HuffNode * node = new HuffNode();
 
-            node->setCaractere(i);
-            node->setFreq(m_frequencyArray[i]);
+            node->setCharacter(i);
+            node->setFrequency(m_frequencyArray[i]);
             node->setIsLeaf(true);
             node->setLeftChild(NULL);
             node->setRightChild(NULL);
 
 
-            qDebug() << node->getFreq() << "-" << node->isLeaf();
+            qDebug() << node->frequency() << "-" << node->isLeaf();
 
-            lista.append(node);
+            list.append(node);
 
         }
     }
 
-    qDebug() << lista.length();
+    qDebug() << list.length();
 
 
-    foreach (HuffNode* no, lista) {
-        char carac = no->getCaractere();
-        qDebug() << carac << " " << no->getFreq();
+    foreach (HuffNode* node, list) {
+        char ch = node->character();
+        qDebug() << ch << " " << node->frequency();
     }
 
-    lista = ordenarLista(lista);
+    list = sortList(list);
 
-    while(lista.size()>1)
+    while(list.size() > 1)
     {
 
+        HuffNode * leftChild = list.first();
+        list.removeAt(list.indexOf(leftChild));
 
-        HuffNode * rightChild = lista.first();
-        lista.removeAt(lista.indexOf(rightChild));
-        HuffNode * leftChild = lista.first();
-        lista.removeAt(lista.indexOf(leftChild));
+        HuffNode * rightChild = list.first();
+        list.removeAt(list.indexOf(rightChild));
+
 
         HuffNode * parent = new HuffNode();
-        parent->setFreq(leftChild->getFreq()+rightChild->getFreq());
+        parent->setFrequency(leftChild->frequency() + rightChild->frequency());
         parent->setIsLeaf(false);
         parent->setLeftChild(leftChild);
         parent->setRightChild(rightChild);
-        parent->setCaractere(NULL);
+        parent->setCharacter(NULL);
 
-        lista.append(parent);
+        list.append(parent);
 
-        lista = ordenarLista(lista);
+        list = sortList(list);
 
-        qDebug() << lista.length();
+        qDebug() << list.length();
     }
 
-    m_root = lista.first();
+    m_root = list.first();
 
     return m_root;
 
 }
 
-HuffNode * HuffTree::comparar(HuffNode *a, HuffNode *b)
+HuffNode * HuffTree::compare(HuffNode *a, HuffNode *b)
 {
-    if(a->getFreq()<b->getFreq())
+    if(a->frequency() < b->frequency())
     {
         return a;
     }else
     {
-        if(b->getFreq()<a->getFreq())
+        if(b->frequency() < a->frequency())
         {
             return b;
         }else
         {
-            if(a->getCaractere()<b->getCaractere())
+            if(a->character() < b->character())
             {
                 return a;
             }else
@@ -103,69 +102,65 @@ HuffNode * HuffTree::comparar(HuffNode *a, HuffNode *b)
     }
 }
 
-QList<HuffNode*> HuffTree::ordenarLista(QList<HuffNode*> lista)
+QList<HuffNode*> HuffTree::sortList(QList<HuffNode*> list)
 {
-    QList<HuffNode*> listaordenada = QList<HuffNode*>();
+    QList<HuffNode*> sortedList = QList<HuffNode*>();
 
-    while(!lista.empty())
+    while(!list.empty())
     {
-        HuffNode * menor = lista.first();
+        HuffNode * lowest = list.first();
         int removeIndex;
-        foreach (HuffNode* no, lista) {
-            menor = comparar(menor,no);
-            removeIndex=lista.indexOf(menor);
+        foreach (HuffNode* node, list) {
+            lowest = compare(lowest,node);
+            removeIndex=list.indexOf(lowest);
 
         }
-        listaordenada.append(menor);
-        lista.removeAt(removeIndex);
-
+        sortedList.append(lowest);
+        list.removeAt(removeIndex);
     }
 
-    return listaordenada;
-
+    return sortedList;
 }
 
 void HuffTree::printTree()
 {
-    qDebug() << m_root->getFreq();
+    qDebug() << m_root->frequency();
 
-    QList<HuffNode*> lista = QList<HuffNode*>();
+    QList<HuffNode*> list = QList<HuffNode*>();
 
-    lista.append(m_root);
+    list.append(m_root);
 
-    bool fundo = false;
-    QString linha = QString();
-    while(!fundo)
+    bool deep = false;
+
+    while(!deep)
     {
-        QList<HuffNode*> novaLista = QList<HuffNode*>();
+        QList<HuffNode*> newList = QList<HuffNode*>();
 
 
-        foreach (HuffNode * node, lista) {
+        foreach (HuffNode * node, list) {
 
             if(!node->isLeaf())
             {
 
-                printf("%d %d ",node->getLeft()->getFreq(),node->getRight()->getFreq());
+                printf("%d %d ",node->leftChild()->frequency(), node->rightChild()->frequency());
 
-
-
-                //                qDebug() << node->getLeft()->getFreq() << " " << node->getRight()->getFreq();
-                novaLista.append(node->getLeft());
-                novaLista.append(node->getRight());
+                //qDebug() << node->getLeft()->getFreq() << " " << node->getRight()->getFreq();
+                newList.append(node->leftChild());
+                newList.append(node->rightChild());
 
             }
         }
 
         printf("\n");
 
-        lista=novaLista;
-        fundo = reachedDeep(lista);
+        list = newList;
+        deep = reachedDeep(list);
     }
 }
 
-bool HuffTree::reachedDeep(QList<HuffNode *> lista)
+bool HuffTree::reachedDeep(QList<HuffNode *> list)
 {
-    foreach (HuffNode * node, lista) {
+    foreach (HuffNode * node, list) {
 
         if(!node->isLeaf()) return false;
     }
