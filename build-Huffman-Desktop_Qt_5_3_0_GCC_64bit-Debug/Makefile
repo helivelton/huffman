@@ -526,7 +526,8 @@ main.o: ../Huffman/main.cpp ../../../../Qt/5.3/gcc_64/include/QtCore/QDebug \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QString \
 		../Huffman/hufftree.h \
 		../Huffman/huffnode.h \
-		../../../../Qt/5.3/gcc_64/include/QtCore/QList
+		../../../../Qt/5.3/gcc_64/include/QtCore/QList \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Huffman/main.cpp
 
 fileprocessor.o: ../Huffman/fileprocessor.cpp ../Huffman/fileprocessor.h \
@@ -672,6 +673,7 @@ hufftree.o: ../Huffman/hufftree.cpp ../Huffman/hufftree.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qset.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QList \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QListIterator
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hufftree.o ../Huffman/hufftree.cpp
 

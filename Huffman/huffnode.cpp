@@ -2,6 +2,9 @@
 
 HuffNode::HuffNode()
 {
+    for (int i = 0; i < 256; i++) {
+        this->m_childs[i] = false;
+    }
 }
 
 HuffNode::HuffNode(int frequency, unsigned char character, HuffNode * leftChild, HuffNode * rightChild, bool isLeaf)
@@ -11,6 +14,10 @@ HuffNode::HuffNode(int frequency, unsigned char character, HuffNode * leftChild,
     m_leftChild = leftChild;
     m_rightChild = rightChild;
     m_isLeaf = isLeaf;
+
+    for (int i = 0; i < 256; i++) {
+        this->m_childs[i] = false;
+    }
 }
 
 HuffNode::HuffNode(int frequency, unsigned char character, bool isLeaf)
@@ -18,6 +25,11 @@ HuffNode::HuffNode(int frequency, unsigned char character, bool isLeaf)
     m_frequency = frequency;
     m_character = character;
     m_isLeaf = isLeaf;
+
+
+    for (int i = 0; i < 256; i++) {
+        this->m_childs[i] = false;
+    }
 }
 
 unsigned char HuffNode::character()
@@ -28,6 +40,22 @@ unsigned char HuffNode::character()
 int HuffNode::frequency()
 {
     return m_frequency;
+}
+
+bool HuffNode::isChild(char character)
+{
+    return m_childs[(int) character] || this->character() == character;
+}
+
+void HuffNode::child(HuffNode * node) {
+
+    for (int i = 0; i < 256; i++) {
+        if (node->m_childs[i]) {
+            this->m_childs[i] = node->m_childs[i];
+        }
+    }
+
+    m_childs[(int) node->character()] = true;
 }
 
 HuffNode * HuffNode::leftChild()

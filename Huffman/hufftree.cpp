@@ -2,6 +2,7 @@
 #include "huffnode.h"
 #include <QList>
 #include <QListIterator>
+#include <QByteArray>
 
 HuffTree::HuffTree()
 {
@@ -64,6 +65,10 @@ HuffNode * HuffTree::buildTree()
         parent->setLeftChild(leftChild);
         parent->setRightChild(rightChild);
         parent->setCharacter(NULL);
+
+        parent->child(leftChild);
+        parent->child(rightChild);
+
 
         list.append(parent);
 
@@ -156,6 +161,36 @@ void HuffTree::printTree()
         list = newList;
         deep = reachedDeep(list);
     }
+}
+
+QByteArray * HuffTree::codification(char character)
+{
+    QByteArray * array = new QByteArray();
+
+    HuffNode * node = m_root;
+
+    if (!node->isChild(character)) {
+        return NULL;
+    }
+
+    while (true) {
+
+        if (node->isLeaf() && node->character() == character) {
+            return array;
+        }
+
+        if (node->leftChild()->isChild((int)character)) {
+            node = node->leftChild();
+            array->append('0');
+        } else if (node->rightChild()->isChild((int)character)) {
+            node = node->rightChild();
+            array->append('1');
+        } else {
+            return NULL;
+        }
+
+    }
+
 }
 
 bool HuffTree::reachedDeep(QList<HuffNode *> list)
