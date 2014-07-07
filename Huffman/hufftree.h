@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QList>
 #include <QByteArray>
+#include <QBitArray>
 
 class HuffTree
 {
@@ -12,7 +13,8 @@ public:
     HuffTree(int * frequencyArray);
     HuffNode * buildTree();
     HuffNode* compare(HuffNode * a, HuffNode * b); //retorna o Huffnode com menor peso
-    QByteArray* codification(char character);
+    QBitArray* codification(unsigned char character);
+    QByteArray* representation();
     QList<HuffNode*> sortList(QList<HuffNode*> list);
     void printTree();
     bool reachedDeep(QList<HuffNode*> list);
@@ -20,6 +22,7 @@ public:
 private:
     HuffNode * m_root;
     int * m_frequencyArray;
+    void representationRecursive(HuffNode *node, QByteArray * array);
 };
 
 #endif // HUFFTREE_H

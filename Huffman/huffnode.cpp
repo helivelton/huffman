@@ -1,4 +1,5 @@
 #include "huffnode.h"
+#include <QDebug>
 
 HuffNode::HuffNode()
 {
@@ -42,20 +43,22 @@ int HuffNode::frequency()
     return m_frequency;
 }
 
-bool HuffNode::isChild(char character)
+bool HuffNode::isChild(unsigned char character)
 {
-    return m_childs[(int) character] || this->character() == character;
+    return m_childs[character] || (this->isLeaf() && this->character() == character);
 }
 
 void HuffNode::child(HuffNode * node) {
 
     for (int i = 0; i < 256; i++) {
         if (node->m_childs[i]) {
-            this->m_childs[i] = node->m_childs[i];
+            this->m_childs[i] = true;
         }
     }
 
-    m_childs[(int) node->character()] = true;
+    if (node->isLeaf()) {
+        m_childs[node->character()] = true;
+    }
 }
 
 HuffNode * HuffNode::leftChild()

@@ -13,7 +13,7 @@ public:
     unsigned char character();
     HuffNode * leftChild();
     HuffNode * rightChild();
-    bool isChild(char character);
+    bool isChild(unsigned char character);
 
     void setFrequency(int frequency);
     void setCharacter(unsigned char character);

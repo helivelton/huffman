@@ -48,11 +48,13 @@ OBJECTS_DIR   = ./
 SOURCES       = ../Huffman/main.cpp \
 		../Huffman/fileprocessor.cpp \
 		../Huffman/hufftree.cpp \
-		../Huffman/huffnode.cpp 
+		../Huffman/huffnode.cpp \
+		../Huffman/huffcompactor.cpp 
 OBJECTS       = main.o \
 		fileprocessor.o \
 		hufftree.o \
-		huffnode.o
+		huffnode.o \
+		huffcompactor.o
 DIST          = ../../../../Qt/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.3/gcc_64/mkspecs/common/shell-unix.conf \
 		../../../../Qt/5.3/gcc_64/mkspecs/common/unix.conf \
@@ -161,7 +163,8 @@ DIST          = ../../../../Qt/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		../Huffman/Huffman.pro ../Huffman/main.cpp \
 		../Huffman/fileprocessor.cpp \
 		../Huffman/hufftree.cpp \
-		../Huffman/huffnode.cpp
+		../Huffman/huffnode.cpp \
+		../Huffman/huffcompactor.cpp
 QMAKE_TARGET  = Huffman
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Huffman
@@ -416,7 +419,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Huffman1.0.0 || mkdir -p .tmp/Huffman1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Huffman/fileprocessor.h ../Huffman/hufftree.h ../Huffman/huffnode.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Huffman/main.cpp ../Huffman/fileprocessor.cpp ../Huffman/hufftree.cpp ../Huffman/huffnode.cpp .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Huffman/fileprocessor.h ../Huffman/hufftree.h ../Huffman/huffnode.h ../Huffman/huffcompactor.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Huffman/main.cpp ../Huffman/fileprocessor.cpp ../Huffman/hufftree.cpp ../Huffman/huffnode.cpp ../Huffman/huffcompactor.cpp .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
 
 
 clean:compiler_clean 
@@ -524,10 +527,13 @@ main.o: ../Huffman/main.cpp ../../../../Qt/5.3/gcc_64/include/QtCore/QDebug \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qfile.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QString \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray \
+		../Huffman/huffcompactor.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QBitArray \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qbitarray.h \
 		../Huffman/hufftree.h \
 		../Huffman/huffnode.h \
-		../../../../Qt/5.3/gcc_64/include/QtCore/QList \
-		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray
+		../../../../Qt/5.3/gcc_64/include/QtCore/QList
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Huffman/main.cpp
 
 fileprocessor.o: ../Huffman/fileprocessor.cpp ../Huffman/fileprocessor.h \
@@ -601,7 +607,8 @@ fileprocessor.o: ../Huffman/fileprocessor.cpp ../Huffman/fileprocessor.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qvector.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qpoint.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qset.h \
-		../../../../Qt/5.3/gcc_64/include/QtCore/qcontiguouscache.h
+		../../../../Qt/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QTextStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fileprocessor.o ../Huffman/fileprocessor.cpp
 
 hufftree.o: ../Huffman/hufftree.cpp ../Huffman/hufftree.h \
@@ -674,11 +681,94 @@ hufftree.o: ../Huffman/hufftree.cpp ../Huffman/hufftree.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QList \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QBitArray \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qbitarray.h \
 		../../../../Qt/5.3/gcc_64/include/QtCore/QListIterator
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hufftree.o ../Huffman/hufftree.cpp
 
 huffnode.o: ../Huffman/huffnode.cpp ../Huffman/huffnode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o huffnode.o ../Huffman/huffnode.cpp
+
+huffcompactor.o: ../Huffman/huffcompactor.cpp ../Huffman/huffcompactor.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QBitArray \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qbitarray.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qfeatures.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QByteArray \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QString \
+		../Huffman/fileprocessor.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QFile \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qisenum.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		../Huffman/hufftree.h \
+		../Huffman/huffnode.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QDebug \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QList \
+		../../../../Qt/5.3/gcc_64/include/QtCore/QMap
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o huffcompactor.o ../Huffman/huffcompactor.cpp
 
 ####### Install
 

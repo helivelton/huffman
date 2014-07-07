@@ -3,6 +3,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QDebug>
+#include <QTextStream>
 
 FileProcessor::FileProcessor()
 {
@@ -23,22 +24,30 @@ FileProcessor::~FileProcessor()
 {
 }
 
+QByteArray FileProcessor::byteArray()
+{
+    m_file->open(QIODevice::ReadOnly);
+
+    QByteArray byteArray = file()->readAll();
+
+    m_file->close();
+
+    return byteArray;
+}
+
 int * FileProcessor::getFrequency(){
 
     if(file()->exists()){
 
-        m_file->open(QIODevice::ReadOnly);
+        QByteArray byteArray = this->byteArray();
 
-        QByteArray byteArray = file()->readAll();
-
-        int * frequencyArray = new int[255];
+        int * frequencyArray = new int[256];
 
         for(int i = 0;i < 256; i++) frequencyArray[i]=0;
 
 
-        qDebug() << byteArray.size();
         for(int i = 0; i < byteArray.size(); i++){
-            frequencyArray[byteArray[i]]++;
+            frequencyArray[(int)((unsigned char) byteArray[i])]++;
         }
 
         return frequencyArray;

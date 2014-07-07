@@ -18,9 +18,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     fileprocessor.cpp \
     hufftree.cpp \
-    huffnode.cpp
+    huffnode.cpp \
+    huffcompactor.cpp
 
 HEADERS += \
     fileprocessor.h \
     hufftree.h \
-    huffnode.h
+    huffnode.h \
+    huffcompactor.h

@@ -3,6 +3,7 @@
 #include <QList>
 #include <QListIterator>
 #include <QByteArray>
+#include <QBitArray>
 
 HuffTree::HuffTree()
 {
@@ -31,20 +32,9 @@ HuffNode * HuffTree::buildTree()
             node->setLeftChild(NULL);
             node->setRightChild(NULL);
 
-
-            qDebug() << node->frequency() << "-" << node->isLeaf();
-
             list.append(node);
 
         }
-    }
-
-    qDebug() << list.length();
-
-
-    foreach (HuffNode* node, list) {
-        char ch = node->character();
-        qDebug() << ch << " " << node->frequency();
     }
 
     list = sortList(list);
@@ -74,7 +64,6 @@ HuffNode * HuffTree::buildTree()
 
         list = sortList(list);
 
-        qDebug() << list.length();
     }
 
     m_root = list.first();
@@ -149,7 +138,6 @@ void HuffTree::printTree()
 
                 printf("%d %d ",node->leftChild()->frequency(), node->rightChild()->frequency());
 
-                //qDebug() << node->getLeft()->getFreq() << " " << node->getRight()->getFreq();
                 newList.append(node->leftChild());
                 newList.append(node->rightChild());
 
@@ -163,9 +151,16 @@ void HuffTree::printTree()
     }
 }
 
-QByteArray * HuffTree::codification(char character)
+QByteArray * HuffTree::representation()
 {
     QByteArray * array = new QByteArray();
+    this->representationRecursive(m_root, array);
+    return array;
+}
+
+QBitArray * HuffTree::codification(unsigned char character)
+{
+    QBitArray * array = new QBitArray();
 
     HuffNode * node = m_root;
 
@@ -173,18 +168,22 @@ QByteArray * HuffTree::codification(char character)
         return NULL;
     }
 
+    int i = 0;
     while (true) {
 
         if (node->isLeaf() && node->character() == character) {
             return array;
         }
 
-        if (node->leftChild()->isChild((int)character)) {
+        if (node->leftChild()->isChild(character)) {
             node = node->leftChild();
-            array->append('0');
-        } else if (node->rightChild()->isChild((int)character)) {
+            array->resize(++i);
+            array->setBit(i - 1, false);
+        } else if (node->rightChild()->isChild(character)) {
             node = node->rightChild();
-            array->append('1');
+
+            array->resize(++i);
+            array->setBit(i - 1, true);
         } else {
             return NULL;
         }
@@ -201,4 +200,27 @@ bool HuffTree::reachedDeep(QList<HuffNode *> list)
     }
 
     return true;
+}
+
+void HuffTree::representationRecursive(HuffNode *node, QByteArray * array) {
+
+    if (node->isLeaf()) {
+        array->append(node->character());
+    } else if (node->rightChild()->isLeaf()
+               && node->leftChild()->isLeaf()) {
+
+        array->append('(');
+        array->append(node->leftChild()->character());
+        array->append(node->rightChild()->character());
+        array->append(')');
+
+    } else {
+        bool noLeaf = !node->rightChild()->isLeaf();
+        representationRecursive(node->leftChild(), array);
+
+        if (noLeaf) array->append('(');
+        representationRecursive(node->rightChild(), array);
+        if (noLeaf) array->append(')');
+    }
+
 }

@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QString>
+#include <QByteArray>
 
 class FileProcessor
 {
@@ -17,6 +18,8 @@ public:
     QString fileName();
     void setFileName(QString fileName);
     void setFile(QFile * file);
+    QByteArray byteArray();
+
 
 private:
     //arquivo
@@ -24,7 +27,5 @@ private:
     //nome do arquivo
     QString m_filename;
 };
-
-
 
 #endif // FILEPROCESSOR_H
