@@ -4,9 +4,60 @@
 #include <QMap>
 #include <QBitArray>
 #include <QString>
+#include <math.h>
 
 HuffCompactor::HuffCompactor()
 {
+}
+
+QBitArray * HuffCompactor::intToBits(int integer, int numBits){
+    QBitArray * bitArray = new QBitArray();
+    int count = 0;
+
+    do {
+        count++;
+
+        int mod = integer % 2;
+        integer = integer / 2;
+
+        bitArray->resize(count);
+        bitArray->setBit(count - 1, mod == 0 ? false : true);
+
+    } while(integer > 0);
+
+    if(bitArray->size() != numBits){
+        int size = bitArray->size();
+        bitArray->resize(numBits);
+        for(int i = size; i < numBits; i++){
+            bitArray->setBit(i, 0);
+        }
+    }
+
+    reverse(bitArray);
+
+    return bitArray;
+}
+
+int HuffCompactor::bitsToInt(QBitArray *bits)
+{
+    reverse(bits);
+    int integer = 0;
+    qDebug() << "tetse q " << bits->size();
+    for(int i = bits->size()-1; i >= 0; i--){
+        qDebug() << "kdjs -- " << bits->at(i);
+        integer+= ((int)bits->at(i)) * pow(2,i);
+    }
+    return integer;
+}
+
+QBitArray * HuffCompactor::reverse(QBitArray *bitArray){
+    bool aux;
+    for(int i = 0; i < bitArray->size()/2; i++){
+        aux = bitArray->at(bitArray->size()-1-i);
+        bitArray->setBit(bitArray->size()-1-i, bitArray->at(i));
+        bitArray->setBit(i, aux);
+    }
+    return bitArray;
 }
 
 QBitArray * HuffCompactor::compact(QString filePath)

@@ -10,6 +10,10 @@ class HuffCompactor
 public:
     HuffCompactor();
     QBitArray * compact(QString filePath);
+
+    QBitArray * intToBits(int integer, int numBits);
+    int bitsToInt(QBitArray * bits);
+    QBitArray * reverse(QBitArray * bitArray);
 };
 
 #endif // HUFFCOMPACTOR_H
