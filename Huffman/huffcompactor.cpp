@@ -54,7 +54,7 @@ QBitArray * HuffCompactor::QbyteArrayToQBitArray(QByteArray bytes) {
 QByteArray * HuffCompactor::QbitArrayToQByteArray(QBitArray * bits) {
     QByteArray * bytes = new QByteArray();
 
-    if((bits->size()&8)==0)
+    if((bits->size()%8)==0)
     {
         bytes->resize(bits->size()/8);
 
@@ -65,9 +65,15 @@ QByteArray * HuffCompactor::QbitArrayToQByteArray(QBitArray * bits) {
 
 
     // Convert from QBitArray to QByteArray
-    for(int b=0; b<bits->count(); ++b)
+
+    for(int i =0;i<bytes->size();i++)
     {
-        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)?1:0)<<(b%8)));
+        bytes->operator [](i)=0;
+    }
+
+    for(int b = 0; b < bits->count(); ++b)
+    {
+        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(b%8)));
 
     }
 
@@ -148,19 +154,19 @@ int HuffCompactor::bitsToInt(QBitArray *bits)
 //}
 
 
-    QBitArray * HuffCompactor::reverse(QBitArray *bitArray){
-        bool aux;
-        QBitArray * reversed = new QBitArray();
-        reversed->resize(bitArray->size());
-        *reversed = *bitArray;
+QBitArray * HuffCompactor::reverse(QBitArray *bitArray){
+    bool aux;
+    QBitArray * reversed = new QBitArray();
+    reversed->resize(bitArray->size());
+    *reversed = *bitArray;
 
-        for(int i = 0; i < reversed->size()/2; i++){
-            aux = reversed->at(reversed->size()-1-i);
-            reversed->setBit(reversed->size()-1-i, reversed->at(i));
-            reversed->setBit(i, aux);
-        }
-        return reversed;
+    for(int i = 0; i < reversed->size()/2; i++){
+        aux = reversed->at(reversed->size()-1-i);
+        reversed->setBit(reversed->size()-1-i, reversed->at(i));
+        reversed->setBit(i, aux);
     }
+    return reversed;
+}
 
 
 QBitArray * HuffCompactor::compact(QString filePath)
@@ -227,104 +233,59 @@ QBitArray * HuffCompactor::compact(QString filePath)
 
 
 
-//    QBitArray * garbageSize = intToBits(garbSize,3);
-//    QBitArray * treeSize = intToBits(repr->size(),13);
-//    QBitArray * fileNameSizeBits = intToBits(fp.fileName().size(),8);
+        QBitArray * garbageSize = intToBits(garbSize,3);
+        QBitArray * treeSize = intToBits(repr->size(),13);
+        QBitArray * fileNameSizeBits = intToBits(fp.fileName().size(),8);
 
-//    QBitArray * fileInBits = mergeQBitArray(garbageSize,treeSize);
-//    fileInBits  = mergeQBitArray(fileInBits,fileNameSizeBits);
+        QBitArray * fileInBits = mergeQBitArray(garbageSize,treeSize);
+        fileInBits = mergeQBitArray(fileInBits,fileNameSizeBits);
 
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-//    fileInBits  = mergeQBitArray(fileInBits,fileInBits);
-
-//    QByteArray * fileInBytes = QbitArrayToQByteArray(fileInBits);
-
-
-//    QString nome("Helivelton");
-
-//    QByteArray * fileInBytes = new QByteArray();
-//    fileInBytes->resize(nome.size());
-//    for(int i=0;i<nome.size();i++)
-//    {
-
-//        fileInBytes->operator [](i)    = 'h';
-//    }
-
-//    QBitArray * fileInBits = QbyteArrayToQBitArray(fileInBytes);
-
-//    fileInBytes = QbitArrayToQByteArray(fileInBits);
-
-
-//    QFile file("C:/Users/Helivelton/UFAL/ESTRUTURA/HGB.TXT");
-//    file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QByteArray * fileInBytes = QbitArrayToQByteArray(fileInBits);
 
 
 
-//    for(int i =0;i<fileInBits->size();i++)
-//    {
-//        if(fileInBits->operator [](i))
-//        {
-//            file.putChar('1');
-//        }else
-//        {
-//            file.putChar('0');
-//        }
-//    }
+    QFile file("C:/Users/Helivelton/UFAL/ESTRUTURA/HGB.TXT");
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 
-//    file.close();
+    for(int i =0;i<fileInBytes->size();i++)
+    {
+       file.putChar(fileInBytes->at(i));
+
+    }
+
+    QByteArray fileName;
+    fileName.append(fp.fileName());
+
+    for(int i=0; i < fileName.size(); i++)
+    {
+        qDebug() << fileName.at(i);
+    }
+
+//    QTextStream fout(&file);
+//    fout << fp.fileName();
 
 
-//    QBitArray * apos = QbyteArrayToQBitArray(fileInBytes);
+    for(int i =0;i<fileName.size();i++)
+    {
+       file.putChar(fileName.at(i));
+    }
 
-//    QFile file2("C:/Users/Helivelton/UFAL/ESTRUTURA/HGB2.TXT");
-//    file2.open(QIODevice::WriteOnly | QIODevice::Text);
+    for(int i=0; i < repr->size(); i++)
+    {
+        file.putChar(repr->at(i));
 
-//    QFile file3("C:/Users/Helivelton/UFAL/ESTRUTURA/FINAL.TXT");
-//    file3.open(QIODevice::WriteOnly | QIODevice::Text);
+    }
 
-//    QBitArray * reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
-//    reprBits = QbyteArrayToQBitArray(repr);
-//    repr = QbitArrayToQByteArray(reprBits);
+    QByteArray * codeInBytes = QbitArrayToQByteArray(code);
 
-//    for(int i=0;i<repr->size();i++)
-//    {
-//        file3.putChar(repr->operator [](i));
-//        //qDebug() << fileInBytes->operator [](i);
-//    }
+    for(int i=0; i < codeInBytes->size(); i++)
+    {
+        file.putChar(codeInBytes->at(i));
+    }
 
+    file.close();
 
-//    for(int i =0;i<apos->size();i++)
-//    {
-//        if(apos->operator [](i))
-//        {
-//            file2.putChar('1');
-//        }else
-//        {
-//            file2.putChar('0');
-//        }
-//    }
-
-
-//    file2.close();
-//    file3.close();
 
 
     return NULL;
