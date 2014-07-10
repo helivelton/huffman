@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <fileprocessor.h>
-#include <huffcompactor.h>
+#include <huffcompressor.h>
 #include <hufftree.h>
 #include <QByteArray>
 
@@ -17,12 +17,9 @@ QString representBitArray(QBitArray * array) {
 int main(int argc, char *argv[])
 {
 
-    HuffCompactor * compactor = new HuffCompactor();
+    HuffCompressor * compressor = new HuffCompressor();
 
-    QBitArray * compacted =  compactor->compact("C:/Users/Helivelton/UFAL/ESTRUTURA/black.png");
+    compressor->compress("/home/anapaula/Downloads/manutencao.doc");
 
-    QByteArray * bytes = new QByteArray();
-    bytes->resize(10);
-
-
+    compressor->uncompress("/home/anapaula/compactado.huff");
 }

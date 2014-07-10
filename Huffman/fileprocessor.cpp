@@ -30,14 +30,18 @@ QByteArray FileProcessor::byteArray()
 {
     m_file->open(QIODevice::ReadOnly);
 
-    QByteArray byteArray = file()->readAll();
+    QByteArray byteArray = m_file->readAll();
 
     m_file->close();
 
     return byteArray;
 }
 
-int * FileProcessor::getFrequency(){
+//calcula a frequencia dos caractere do arquivo. Retorna um array de int
+//em que sua posição representa o código ascii do caractere e o conteúdo
+//da respectiva posição representa a frequencia com que tal caractere se
+//repete.
+int * FileProcessor::calculateFrequency(){
 
     if(file()->exists()){
 
@@ -45,10 +49,11 @@ int * FileProcessor::getFrequency(){
 
         int * frequencyArray = new int[256];
 
-        for(int i = 0;i < 256; i++) frequencyArray[i]=0;
+        for(int i = 0;i < 256; i++) frequencyArray[i] = 0;
 
 
         for(int i = 0; i < byteArray.size(); i++){
+            //incrementa o valor da frequencia de acordo com a posição
             frequencyArray[(int)((unsigned char) byteArray[i])]++;
         }
 

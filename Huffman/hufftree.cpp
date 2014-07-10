@@ -14,7 +14,7 @@ HuffTree::HuffTree(int * frequencyArray)
     m_frequencyArray = frequencyArray;
 }
 
-
+//constroi a arvore
 HuffNode * HuffTree::buildTree()
 {
     QList<HuffNode*> list = QList<HuffNode*>();

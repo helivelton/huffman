@@ -19,10 +19,10 @@ SOURCES += main.cpp \
     fileprocessor.cpp \
     hufftree.cpp \
     huffnode.cpp \
-    huffcompactor.cpp
+    huffcompressor.cpp
 
 HEADERS += \
     fileprocessor.h \
     hufftree.h \
     huffnode.h \
-    huffcompactor.h
+    huffcompressor.h

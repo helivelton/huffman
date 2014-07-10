@@ -12,7 +12,8 @@ public:
     ~FileProcessor();
     FileProcessor(QFile file);
     FileProcessor(QString fileName);
-    int * getFrequency();
+    //calcula a frequencia dos caracteres do arquivo
+    int * calculateFrequency();
 
     QFile * file();
     QString fileName();
