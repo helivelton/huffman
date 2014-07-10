@@ -10,17 +10,7 @@ HuffCompactor::HuffCompactor()
 {
 }
 
-QByteArray bitsToBytes(QBitArray bits) {
-    QByteArray bytes;
-    bytes.resize(bits.count()/8);
-    // Convert from QBitArray to QByteArray
-    for(int b=0; b<bits.count(); ++b)
-    {
-        bytes[b/8] = ( bytes.at(b/8) | ((bits[b]?1:0)<<(b%8)));
-    }
 
-    return bytes;
-}
 
 QBitArray * HuffCompactor::QbyteArrayToQBitArray(QByteArray * bytes) {
 
@@ -44,7 +34,14 @@ QBitArray * HuffCompactor::QbyteArrayToQBitArray(QByteArray bytes) {
     for(int i=0; i<bytes.count(); ++i)
         for(int b=0; b<8; ++b)
         {
-            bits->setBit(i*8+b, bytes.at(i)&(1<<b));
+            int desloc = b;
+
+            while(desloc>7)
+            {
+                desloc-=8;
+            }
+
+            bits->setBit(i*8+b, bytes.at(i)&(1<<7-desloc));
         }
 
     return bits;
@@ -70,12 +67,25 @@ QByteArray * HuffCompactor::QbitArrayToQByteArray(QBitArray * bits) {
         bytes->operator [](i)=0;
     }
 
+    bytes->fill(0);
+
     for(int b = 0; b < bits->count(); ++b)
     {
-        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(b%8)));
+        int desloc = b;
+
+        while(desloc>7)
+        {
+            desloc-=8;
+        }
+        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(7-desloc)));
+//        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(b%8)));
     }
 
     return bytes;
+
+//    for(int b=0; b<bits->count(); ++b)
+//            bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)?1:0)<<(b%8)));
+//        return bytes;
 
 }
 
@@ -241,7 +251,21 @@ QBitArray * HuffCompactor::compact(QString filePath)
 
 
 
-    QFile file("/home/paulinha/compactado.huff");
+        char test = fileInBytes->operator [](0);
+        QChar qcharT(test);
+
+        qDebug()<< fileInBytes->operator [](0);
+        qDebug()<< qcharT.unicode();
+
+        qDebug() <<garbSize;
+        qDebug() <<repr->size();
+
+    for(int i=0; i<fileInBits->size();i++)
+    {
+        qDebug() << fileInBits->operator [](i);
+    }
+//        QChar::fromAscii
+    QFile file("C:/Users/Helivelton/UFAL/ESTRUTURA/teste3.huff");
     file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 
