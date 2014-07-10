@@ -15,7 +15,10 @@ QByteArray bitsToBytes(QBitArray bits) {
     bytes.resize(bits.count()/8);
     // Convert from QBitArray to QByteArray
     for(int b=0; b<bits.count(); ++b)
+    {
         bytes[b/8] = ( bytes.at(b/8) | ((bits[b]?1:0)<<(b%8)));
+    }
+
     return bytes;
 }
 
@@ -28,8 +31,6 @@ QBitArray * HuffCompactor::QbyteArrayToQBitArray(QByteArray * bytes) {
         for(int b=0; b<8; ++b)
         {
             bits->setBit(i*8+b, bytes->at(i)&(1<<b));
-
-
         }
 
     return bits;
@@ -44,8 +45,6 @@ QBitArray * HuffCompactor::QbyteArrayToQBitArray(QByteArray bytes) {
         for(int b=0; b<8; ++b)
         {
             bits->setBit(i*8+b, bytes.at(i)&(1<<b));
-
-
         }
 
     return bits;
@@ -74,9 +73,7 @@ QByteArray * HuffCompactor::QbitArrayToQByteArray(QBitArray * bits) {
     for(int b = 0; b < bits->count(); ++b)
     {
         bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(b%8)));
-
     }
-
 
     return bytes;
 
@@ -233,24 +230,24 @@ QBitArray * HuffCompactor::compact(QString filePath)
 
 
 
-        QBitArray * garbageSize = intToBits(garbSize,3);
-        QBitArray * treeSize = intToBits(repr->size(),13);
-        QBitArray * fileNameSizeBits = intToBits(fp.fileName().size(),8);
+    QBitArray * garbageSize = intToBits(garbSize,3);
+    QBitArray * treeSize = intToBits(repr->size(),13);
+    QBitArray * fileNameSizeBits = intToBits(fp.fileName().size(),8);
 
-        QBitArray * fileInBits = mergeQBitArray(garbageSize,treeSize);
-        fileInBits = mergeQBitArray(fileInBits,fileNameSizeBits);
+    QBitArray * fileInBits = mergeQBitArray(garbageSize,treeSize);
+    fileInBits = mergeQBitArray(fileInBits,fileNameSizeBits);
 
-        QByteArray * fileInBytes = QbitArrayToQByteArray(fileInBits);
+    QByteArray * fileInBytes = QbitArrayToQByteArray(fileInBits);
 
 
 
-    QFile file("C:/Users/Helivelton/UFAL/ESTRUTURA/HGB.TXT");
+    QFile file("/home/paulinha/compactado.huff");
     file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 
     for(int i =0;i<fileInBytes->size();i++)
     {
-       file.putChar(fileInBytes->at(i));
+        file.putChar(fileInBytes->at(i));
 
     }
 
@@ -262,13 +259,13 @@ QBitArray * HuffCompactor::compact(QString filePath)
         qDebug() << fileName.at(i);
     }
 
-//    QTextStream fout(&file);
-//    fout << fp.fileName();
+    //    QTextStream fout(&file);
+    //    fout << fp.fileName();
 
 
     for(int i =0;i<fileName.size();i++)
     {
-       file.putChar(fileName.at(i));
+        file.putChar(fileName.at(i));
     }
 
     for(int i=0; i < repr->size(); i++)
@@ -284,7 +281,7 @@ QBitArray * HuffCompactor::compact(QString filePath)
         file.putChar(codeInBytes->at(i));
     }
 
-    file.close();
+    //file.close();
 
 
 

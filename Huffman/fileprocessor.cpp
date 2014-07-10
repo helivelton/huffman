@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QTextStream>
+#include <QFileInfo>
 
 FileProcessor::FileProcessor()
 {
@@ -15,8 +16,9 @@ FileProcessor::FileProcessor(QFile file)
 
 FileProcessor::FileProcessor(QString fileName)
 {
-    setFileName(fileName);
     QFile * file = new QFile(fileName);
+    QFileInfo fileInfo(file->fileName());
+    setFileName(fileInfo.fileName());
     setFile(file);
 }
 
