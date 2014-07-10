@@ -62,30 +62,25 @@ QByteArray * HuffCompactor::QbitArrayToQByteArray(QBitArray * bits) {
 
     // Convert from QBitArray to QByteArray
 
-    for(int i =0;i<bytes->size();i++)
-    {
-        bytes->operator [](i)=0;
-    }
-
     bytes->fill(0);
 
     for(int b = 0; b < bits->count(); ++b)
     {
-        int desloc = b;
 
-        while(desloc>7)
-        {
-            desloc-=8;
-        }
-        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(7-desloc)));
-//        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(b%8)));
+//        int desloc = b;
+
+
+//        double percent = (100.0*b)/bits->count();
+//        qDebug() << percent <<'%';
+//        qDebug() << b ;
+//        while(desloc>7)
+//        {
+//            desloc-=8;
+//        }
+        bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)? 1:0)<<(7-(b%8))));
     }
 
     return bytes;
-
-//    for(int b=0; b<bits->count(); ++b)
-//            bytes->operator [](b/8) = ( bytes->at(b/8) | ((bits->operator [](b)?1:0)<<(b%8)));
-//        return bytes;
 
 }
 
@@ -264,6 +259,9 @@ QBitArray * HuffCompactor::compact(QString filePath)
     {
         qDebug() << fileInBits->operator [](i);
     }
+
+    QByteArray * codeInBytes = QbitArrayToQByteArray(code);
+
 //        QChar::fromAscii
     QFile file("C:/Users/Helivelton/UFAL/ESTRUTURA/teste3.huff");
     file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -277,6 +275,7 @@ QBitArray * HuffCompactor::compact(QString filePath)
 
     QByteArray fileName;
     fileName.append(fp.fileName());
+
 
     for(int i=0; i < fileName.size(); i++)
     {
@@ -298,7 +297,7 @@ QBitArray * HuffCompactor::compact(QString filePath)
 
     }
 
-    QByteArray * codeInBytes = QbitArrayToQByteArray(code);
+
 
     for(int i=0; i < codeInBytes->size(); i++)
     {

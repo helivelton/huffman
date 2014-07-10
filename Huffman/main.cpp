@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     HuffCompactor * compactor = new HuffCompactor();
 
-    QBitArray * compacted =  compactor->compact("C:/Users/Helivelton/UFAL/ESTRUTURA/teste3.txt");
+    QBitArray * compacted =  compactor->compact("C:/Users/Helivelton/UFAL/ESTRUTURA/black.png");
 
     QByteArray * bytes = new QByteArray();
     bytes->resize(10);
