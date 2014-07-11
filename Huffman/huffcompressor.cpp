@@ -215,7 +215,7 @@ void HuffCompressor::compress(QString filePath)
     QByteArray * codeInBytes = QbitArrayToQByteArray(code);
 
     //QChar::fromAscii
-    QFile file("/home/anapaula/compactado.huff");
+    QFile file("/home/paulinha/compactado.huff");
 
     file.open(QIODevice::WriteOnly | QIODevice::Text);
 
@@ -256,27 +256,144 @@ void HuffCompressor::compress(QString filePath)
 }
 
 void HuffCompressor::uncompress(QString filePath)
+
 {
+
     QFile file(filePath);
+
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
+
     QByteArray byteArray = file.readAll();
+
 
     QBitArray * bitArray = QbyteArrayToQBitArray(byteArray);
 
+
     QBitArray * garbSize = new QBitArray();
+
+    QBitArray * treeSize = new QBitArray();
+
+    QBitArray * nameSize = new QBitArray();
+
 
     garbSize->resize(3);
 
+    treeSize->resize(13);
+
+    nameSize->resize(8);
+
+
+
+    int startIndex = 0;
 
     for(int i = 0; i < 3; i++)
+
     {
-        garbSize->setBit(i, bitArray->at(i));
+
+        garbSize->setBit(i, bitArray->at(startIndex++));
+
     }
+
+
+    for (int i = 0; i < 13; i++) {
+
+        treeSize->setBit(i, bitArray->at(startIndex++));
+
+    }
+
+
+    for (int i = 0; i < 8; i++) {
+
+        nameSize->setBit(i, bitArray->at(startIndex++));
+
+    }
+
+
+
+    int garbageSize = this->bitsToInt(garbSize);
+
+    int treeSizeInt = this->bitsToInt(treeSize);
+
+    int nameSizeInt = this->bitsToInt(nameSize);
+
+
+    QByteArray * nameArray = new QByteArray();
+
+    for (int i = 0; i < nameSizeInt; i++) {
+
+        QBitArray * temp = new QBitArray();
+
+        temp->resize(8);
+
+
+        for (int i = 0; i < 8; i++) {
+
+            temp->setBit(i, bitArray->at(startIndex++));
+
+        }
+
+
+        nameArray->append((char) this->bitsToInt(temp));
+
+
+        delete temp;
+
+    }
+
+
+    QByteArray * treeArray = new QByteArray();
+
+    for (int i = 0; i < treeSizeInt; i++) {
+
+        QBitArray * temp = new QBitArray();
+
+        temp->resize(8);
+
+
+        for (int i = 0; i < 8; i++) {
+
+            temp->setBit(i, bitArray->at(startIndex++));
+
+        }
+
+
+        treeArray->append((char) this->bitsToInt(temp));
+
+
+        delete temp;
+
+    }
+
+
+    QBitArray * codification = new QBitArray(bitArray->size() - startIndex - garbageSize);
+
+    int j = 0;
+
+    for (int i = startIndex; i < bitArray->size() - garbageSize; i++) {
+
+        codification->setBit(j++, bitArray->at(i));
+
+    }
+
+
+
+    qDebug() << "index -- >>> " << startIndex;
 
     qDebug() << "size compacted -- >>> " << bitArray->size()/8;
 
     qDebug() << "garbage size -- >>> " << garbageSize;
+
+    qDebug() << "tree size -- >>> " << treeSizeInt;
+
+    qDebug() << "name size -- >>> " << nameSizeInt;
+
+    qDebug() << "name -- >>> " << nameArray->data();
+
+    qDebug() << "tree -- >>> " << treeArray->data();
+
+    qDebug() << "cod size -- >>> " << codification->size();
+
 
 }

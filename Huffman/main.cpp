@@ -17,9 +17,10 @@ QString representBitArray(QBitArray * array) {
 int main(int argc, char *argv[])
 {
 
-    HuffCompressor * compressor = new HuffCompressor();
+    //HuffCompressor * compressor = new HuffCompressor();
 
-    compressor->compress("/home/anapaula/Downloads/manutencao.doc");
+   // compressor->compress("/home/paulinha/Downloads/tela-preta.png");
 
-    compressor->uncompress("/home/anapaula/compactado.huff");
+    compressor->uncompress("/home/paulinha/compactado.huff");
+
 }
