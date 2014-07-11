@@ -13,6 +13,9 @@ public:
     unsigned char character();
     HuffNode * leftChild();
     HuffNode * rightChild();
+    HuffNode * getParent();
+    bool hasLeft = false;
+    bool hasRight = false;
     bool isChild(unsigned char character);
 
     void setFrequency(int frequency);
@@ -20,11 +23,13 @@ public:
     void setLeftChild(HuffNode * node);
     void setRightChild(HuffNode * node);
     void setIsLeaf(bool isLeaf);
+    void setParent(HuffNode * node);
 
     void child(HuffNode * node);
     HuffNode* compare(HuffNode * a, HuffNode * b); //retorna o Huffnode com menor peso
 
 private:
+    HuffNode * m_parent;
     int m_frequency;
     unsigned char m_character;
     HuffNode * m_leftChild;

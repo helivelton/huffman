@@ -101,6 +101,15 @@ void HuffNode::setRightChild(HuffNode *node)
     m_rightChild = node;
 }
 
+void HuffNode::setParent(HuffNode * node)
+{
+    m_parent = node;
+}
+
+HuffNode * HuffNode::getParent()
+{
+    return m_parent;
+}
 
 HuffNode * HuffNode::compare(HuffNode *a, HuffNode *b)
 {

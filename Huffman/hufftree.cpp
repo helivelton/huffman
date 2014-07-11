@@ -224,3 +224,13 @@ void HuffTree::representationRecursive(HuffNode *node, QByteArray * array) {
     }
 
 }
+
+void HuffTree::setRoot(HuffNode *node)
+{
+    m_root = node;
+}
+
+HuffNode * HuffTree::getRoot()
+{
+    return m_root;
+}

@@ -454,6 +454,9 @@ void HuffCompressor::uncompress()
             }
 
         }
+    
+    HuffTree * codificationTree = new HuffTree();
+    
 
     qDebug() << "index -- >>> " << startIndex;
 
