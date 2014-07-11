@@ -5,9 +5,23 @@
 #include <QBitArray>
 #include <QString>
 #include <math.h>
+#include <QFileInfo>
 
 HuffCompressor::HuffCompressor()
 {
+}
+
+HuffCompressor::HuffCompressor(QString filePath, QString pathOutFile, QString directory)
+{
+    m_filePath = filePath;
+    m_pathOutFile = pathOutFile;
+    m_directory = directory;
+
+    if(m_directory != ""){
+        QFile * file = new QFile(filePath);
+        QFileInfo fileInfo(file->fileName());
+        m_pathOutFile = directory.append("/").append(fileInfo.fileName());
+    }
 }
 
 //Converte de QByteArray para QBitArray
@@ -146,9 +160,9 @@ QBitArray * HuffCompressor::reverse(QBitArray *bitArray){
 }
 
 //comprime o arquivo
-void HuffCompressor::compress(QString filePath)
+void HuffCompressor::compress()
 {
-    FileProcessor fp(filePath);
+    FileProcessor fp(m_filePath);
     int * arr = fp.calculateFrequency();
     QByteArray  fileArray = fp.byteArray();
     QBitArray * bitArray[256];
@@ -197,7 +211,6 @@ void HuffCompressor::compress(QString filePath)
         }
     }
 
-
     int garbSize = 8 - code->size() % 8;
 
     //ver tudo q precisa ser salvo no arquivo compactado, falta isso aqui abaixo
@@ -215,7 +228,7 @@ void HuffCompressor::compress(QString filePath)
     QByteArray * codeInBytes = QbitArrayToQByteArray(code);
 
     //QChar::fromAscii
-    QFile file("/home/paulinha/compactado.huff");
+    QFile file(m_pathOutFile);
 
     file.open(QIODevice::WriteOnly | QIODevice::Text);
 
@@ -227,6 +240,7 @@ void HuffCompressor::compress(QString filePath)
     }
 
     QByteArray fileName;
+
     fileName.append(fp.fileName());
 
 
@@ -255,11 +269,11 @@ void HuffCompressor::compress(QString filePath)
 
 }
 
-void HuffCompressor::uncompress(QString filePath)
+void HuffCompressor::uncompress()
 
 {
 
-    QFile file(filePath);
+    QFile file(m_filePath);
 
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -291,26 +305,20 @@ void HuffCompressor::uncompress(QString filePath)
     for(int i = 0; i < 3; i++)
 
     {
-
         garbSize->setBit(i, bitArray->at(startIndex++));
-
     }
 
 
     for (int i = 0; i < 13; i++) {
 
         treeSize->setBit(i, bitArray->at(startIndex++));
-
     }
 
 
     for (int i = 0; i < 8; i++) {
 
         nameSize->setBit(i, bitArray->at(startIndex++));
-
     }
-
-
 
     int garbageSize = this->bitsToInt(garbSize);
 

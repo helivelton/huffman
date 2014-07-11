@@ -9,10 +9,11 @@ class HuffCompressor
 {
 public:
     HuffCompressor();
+    HuffCompressor(QString filePath, QString pathOutFile, QString directory);
     //compacta um arquivo
-    void compress(QString filePath);
+    void compress();
     //descompacta um arquivo
-    void uncompress(QString filePath);
+    void uncompress();
 
 
     //metodos auxilixares
@@ -24,6 +25,11 @@ public:
     QByteArray * QbitArrayToQByteArray(QBitArray * bits);
     QBitArray * QbyteArrayToQBitArray(QByteArray * bytes);
     QBitArray * QbyteArrayToQBitArray(QByteArray bytes);
+
+private:
+    QString m_filePath;
+    QString m_pathOutFile;
+    QString m_directory;
 };
 
 #endif // HUFFCOMPRESSOR_H
