@@ -172,6 +172,7 @@ QBitArray * HuffTree::codification(unsigned char character)
     while (true) {
 
         if (node->isLeaf() && node->character() == character) {
+
             return array;
         }
 

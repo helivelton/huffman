@@ -206,16 +206,23 @@ void HuffCompressor::compress()
 
     for(int i = 0; i < fileArray.size(); i++)
     {
-        unsigned char ch = fileArray.at(i);
-        QBitArray * bitArr = bitArray[ch];
+//        unsigned char ch = fileArray.at(i);
+//        QBitArray * bitArr = bitArray[ch];
 
-        int j = code->size();
-        code->resize(code->size() + bitArr->size());
-        for (int k = j; k < code->size(); ++k)
-        {
-            code->setBit(j, bitArr->at(k - j));
-        }
+//        int j = code->size();
+//        code->resize(code->size() + bitArr->size());
+//        for (int k = j; k < code->size(); ++k)
+//        {
+//            code->setBit(j, bitArr->at(k - j));
+//        }
+
+          unsigned char ch = fileArray.at(i);
+          QBitArray * bitArr = arvore->codification(fileArray.at(i));
+          code = mergeQBitArray(code,bitArr);
+
     }
+
+
 
     int garbSize = 8 - code->size() % 8;
 

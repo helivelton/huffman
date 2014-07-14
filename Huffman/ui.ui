@@ -37,6 +37,16 @@
      <string>Comprimir</string>
     </property>
    </widget>
+   <widget class="QTextEdit" name="futureFileName">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>70</y>
+      <width>104</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

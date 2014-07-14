@@ -18,6 +18,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QWidget>
 
@@ -29,6 +30,7 @@ public:
     QWidget *centralwidget;
     QTreeView *directoryTree;
     QPushButton *compressButton;
+    QTextEdit *futureFileName;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -45,6 +47,9 @@ public:
         compressButton = new QPushButton(centralwidget);
         compressButton->setObjectName(QStringLiteral("compressButton"));
         compressButton->setGeometry(QRect(490, 140, 75, 23));
+        futureFileName = new QTextEdit(centralwidget);
+        futureFileName->setObjectName(QStringLiteral("futureFileName"));
+        futureFileName->setGeometry(QRect(480, 70, 104, 21));
         UI->setCentralWidget(centralwidget);
         menubar = new QMenuBar(UI);
         menubar->setObjectName(QStringLiteral("menubar"));

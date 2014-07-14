@@ -27,6 +27,11 @@ void UI::on_directoryTree_clicked(const QModelIndex &index)
 {
     m_selectedFile = dirmodel->filePath(index);
 
+    QFile * file = new QFile(m_selectedFile);
+    QFileInfo fileInfo(file->fileName());
+
+    ui->futureFileName->setText(fileInfo.fileName());
+
 }
 
 void UI::on_compressButton_clicked()
