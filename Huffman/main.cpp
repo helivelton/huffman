@@ -22,6 +22,9 @@ void man()
 
 int main(int argc, char *argv[])
 {
+
+
+
     if(argc >= 2 && argc <= 5){
 
         QString fileName, directory, compressed = "";

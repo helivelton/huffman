@@ -25,6 +25,8 @@ public:
     void printTree();
     //verifica se chegou no final da arvore
     bool reachedDeep(QList<HuffNode*> list);
+    void setRoot(HuffNode * node);
+    HuffNode * getRoot();
 
 private:
     //raiz

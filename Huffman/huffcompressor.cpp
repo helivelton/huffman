@@ -425,8 +425,29 @@ void HuffCompressor::uncompress()
                     current = internalNode;
                 }
 
-                if(representation->at(0) != ')')
+                if(representation->at(0) != ')' & representation->at(0)!='0')
                 {
+                    HuffNode * leaf = new HuffNode();
+                    leaf->setCharacter(representation->at(0));
+                    leaf->setIsLeaf(true);
+                    leaf->setParent(current);
+
+                    if(!current->hasLeft)
+                    {
+                        current->setLeftChild(leaf);
+                        current->hasLeft = true;
+                    }else
+                        {
+                            current->setRightChild(leaf);
+                            current->hasRight = true;
+                        }
+
+                }
+
+                if(representation->at(0) == '0')
+                {
+                    representation->remove(0,1);
+
                     HuffNode * leaf = new HuffNode();
                     leaf->setCharacter(representation->at(0));
                     leaf->setIsLeaf(true);
