@@ -21,6 +21,12 @@ HuffCompressor::HuffCompressor(QString filePath, QString pathOutFile, QString di
         QFile * file = new QFile(filePath);
         QFileInfo fileInfo(file->fileName());
         m_pathOutFile = directory.append("/").append(fileInfo.fileName());
+
+        int lastDot = m_pathOutFile.lastIndexOf('.');
+
+        m_pathOutFile = m_pathOutFile.remove(lastDot,m_pathOutFile.size()-lastDot);
+        m_pathOutFile.append(".huff");
+
     }
 }
 
@@ -244,10 +250,7 @@ void HuffCompressor::compress()
     fileName.append(fp.fileName());
 
 
-    for(int i=0; i < fileName.size(); i++)
-    {
-        qDebug() << fileName.at(i);
-    }
+
 
     for(int i =0;i<fileName.size();i++)
     {
@@ -266,6 +269,8 @@ void HuffCompressor::compress()
     }
 
     file.close();
+
+
 
 }
 

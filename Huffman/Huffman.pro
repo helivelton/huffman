@@ -8,6 +8,8 @@ QT       += core
 
 QT       -= gui
 
+QT       += widgets
+
 TARGET = Huffman
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -19,10 +21,15 @@ SOURCES += main.cpp \
     fileprocessor.cpp \
     hufftree.cpp \
     huffnode.cpp \
-    huffcompressor.cpp
+    huffcompressor.cpp \
+    ui.cpp
 
 HEADERS += \
     fileprocessor.h \
     hufftree.h \
     huffnode.h \
-    huffcompressor.h
+    huffcompressor.h \
+    ui.h
+
+FORMS += \
+    ui.ui

@@ -5,7 +5,9 @@
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
-
+#include <QDir>
+#include <QApplication>
+#include <ui.h>
 void man()
 {
     qDebug()<< "---- COMPRESSOR DE HUFFMAN ----" << endl << endl;
@@ -22,8 +24,10 @@ void man()
 
 int main(int argc, char *argv[])
 {
-
-
+    QApplication a(argc, argv);
+    UI z;
+    z.show();
+    return a.exec();
 
     if(argc >= 2 && argc <= 5){
 

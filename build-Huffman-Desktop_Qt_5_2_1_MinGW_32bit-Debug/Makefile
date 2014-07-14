@@ -159,11 +159,15 @@ Makefile: ../Huffman/Huffman.pro ../../../../../Qt/5.2.1/mingw48_32/mkspecs/win3
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/qt.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/resources.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/moc.prf \
+		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/win32/opengl.prf \
+		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/uic.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/testcase_targets.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/exceptions.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/yacc.prf \
 		../../../../../Qt/5.2.1/mingw48_32/mkspecs/features/lex.prf \
 		../Huffman/Huffman.pro \
+		C:/Qt/5.2.1/mingw48_32/lib/Qt5Widgets.prl \
+		C:/Qt/5.2.1/mingw48_32/lib/Qt5Gui.prl \
 		C:/Qt/5.2.1/mingw48_32/lib/Qt5Core.prl
 	$(QMAKE) -spec win32-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ..\Huffman\Huffman.pro
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\spec_pre.prf:
@@ -266,11 +270,15 @@ Makefile: ../Huffman/Huffman.pro ../../../../../Qt/5.2.1/mingw48_32/mkspecs/win3
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\qt.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\resources.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\moc.prf:
+..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\win32\opengl.prf:
+..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\uic.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\testcase_targets.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\exceptions.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\yacc.prf:
 ..\..\..\..\..\Qt\5.2.1\mingw48_32\mkspecs\features\lex.prf:
 ..\Huffman\Huffman.pro:
+C:/Qt/5.2.1/mingw48_32/lib/Qt5Widgets.prl:
+C:/Qt/5.2.1/mingw48_32/lib/Qt5Gui.prl:
 C:/Qt/5.2.1/mingw48_32/lib/Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ..\Huffman\Huffman.pro
