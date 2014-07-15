@@ -11,25 +11,6 @@ HuffCompressor::HuffCompressor()
 {
 }
 
-HuffCompressor::HuffCompressor(QString filePath, QString pathOutFile, QString directory)
-{
-    m_filePath = filePath;
-    m_pathOutFile = pathOutFile;
-    m_directory = directory;
-
-    if(m_directory != ""){
-        QFile * file = new QFile(filePath);
-        QFileInfo fileInfo(file->fileName());
-        m_pathOutFile = directory.append("/").append(fileInfo.fileName());
-
-        int lastDot = m_pathOutFile.lastIndexOf('.');
-
-        m_pathOutFile = m_pathOutFile.remove(lastDot,m_pathOutFile.size()-lastDot);
-        m_pathOutFile.append(".huff");
-
-    }
-}
-
 //Converte de QByteArray para QBitArray
 QBitArray * HuffCompressor::QbyteArrayToQBitArray(QByteArray * bytes) {
 
@@ -166,9 +147,9 @@ QBitArray * HuffCompressor::reverse(QBitArray *bitArray){
 }
 
 //comprime o arquivo
-void HuffCompressor::compress()
+void HuffCompressor::compress(QString from, QString to)
 {
-    FileProcessor fp(m_filePath);
+    FileProcessor fp(from);
     int * arr = fp.calculateFrequency();
     QByteArray  fileArray = fp.byteArray();
     QBitArray * bitArray[256];
@@ -186,48 +167,23 @@ void HuffCompressor::compress()
         }
     }
 
-    for (int i = 0; i < 256; i++) {
-        QString string("");
-        if (bitArray[i] != NULL) {
-            QBitArray * array = bitArray[i];
-            for (int j = 0; j < array->size(); j++) {
-                string.append(array->at(j) ? '1' : '0');
-            }
+    QByteArray * repr =  arvore->representation();
+    QBitArray * code = new QBitArray();
+
+    int index1 = 0;
+    for(int i = 0; i < fileArray.size(); i++)
+    {
+        unsigned char ch = fileArray.at(i);
+        QBitArray * bitArr = bitArray[ch];
+
+        code->resize(code->size() + bitArr->size());
+        for (int j = 0; j < bitArr->size(); ++j)
+        {
+            code->setBit(index1++, bitArr->at(j));
         }
     }
 
-    QByteArray * repr =  arvore->representation();
-    for (int i = 0; i < repr->size(); i++) {
-        printf("%c", repr->at(i));
-    }
-    printf("\n");
-
-    QBitArray * code = new QBitArray();
-
-    for(int i = 0; i < fileArray.size(); i++)
-    {
-//        unsigned char ch = fileArray.at(i);
-//        QBitArray * bitArr = bitArray[ch];
-
-//        int j = code->size();
-//        code->resize(code->size() + bitArr->size());
-//        for (int k = j; k < code->size(); ++k)
-//        {
-//            code->setBit(j, bitArr->at(k - j));
-//        }
-
-          unsigned char ch = fileArray.at(i);
-          QBitArray * bitArr = arvore->codification(fileArray.at(i));
-          code = mergeQBitArray(code,bitArr);
-
-    }
-
-
-
     int garbSize = 8 - code->size() % 8;
-
-    //ver tudo q precisa ser salvo no arquivo compactado, falta isso aqui abaixo
-    int initialSize = 3 + fp.fileName().size() + repr->size() + (code->size()/8) + (code->size() % 8);
 
     QBitArray * garbageSize = intToBits(garbSize,3);
     QBitArray * treeSize = intToBits(repr->size(),13);
@@ -241,9 +197,9 @@ void HuffCompressor::compress()
     QByteArray * codeInBytes = QbitArrayToQByteArray(code);
 
     //QChar::fromAscii
-    QFile file(m_pathOutFile);
+    QFile file(to);
 
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.open(QIODevice::WriteOnly);
 
 
     for(int i =0;i<fileInBytes->size();i++)
@@ -255,9 +211,6 @@ void HuffCompressor::compress()
     QByteArray fileName;
 
     fileName.append(fp.fileName());
-
-
-
 
     for(int i =0;i<fileName.size();i++)
     {
@@ -277,18 +230,17 @@ void HuffCompressor::compress()
 
     file.close();
 
-
-
+    qDebug() << "Compactado :D";
 }
 
-void HuffCompressor::uncompress()
+void HuffCompressor::uncompress(QString from, QString to)
 
 {
 
-    QFile file(m_filePath);
+    QFile file(from);
 
 
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    file.open(QIODevice::ReadOnly);
 
 
     QByteArray byteArray = file.readAll();
@@ -309,8 +261,6 @@ void HuffCompressor::uncompress()
     treeSize->resize(13);
 
     nameSize->resize(8);
-
-
 
     int startIndex = 0;
 
@@ -354,9 +304,7 @@ void HuffCompressor::uncompress()
 
         }
 
-
         nameArray->append((char) this->bitsToInt(temp));
-
 
         delete temp;
 
@@ -378,9 +326,7 @@ void HuffCompressor::uncompress()
 
         }
 
-
         treeArray->append((char) this->bitsToInt(temp));
-
 
         delete temp;
 
@@ -408,101 +354,116 @@ void HuffCompressor::uncompress()
     HuffNode * root = new HuffNode();
     HuffNode * current = root;
 
-
     if(representation->size()==1)
     {
         root->setCharacter(representation->at(0));
         root->setIsLeaf(true);
-    }else
-        {
-            while(representation->size()>0)
+    }else for (int i = 0; i < representation->size(); i++) {
+        if(representation->at(i) == '(') {
+            HuffNode * internalNode = new HuffNode();
+            internalNode->setCharacter(representation->at(i));
+            internalNode->setIsLeaf(false);
+            internalNode->setParent(current);
+
+            if(!current->hasLeft) {
+                current->setLeftChild(internalNode);
+                current->hasLeft = true;
+            } else {
+                current->setRightChild(internalNode);
+                current->hasRight = true;
+            }
+
+            current = internalNode;
+        } else if(representation->at(i) != ')') {
+
+            if (representation->at(i) == 0) {
+                i = i + 1;
+            }
+
+            HuffNode * leaf = new HuffNode();
+            leaf->setCharacter(representation->at(i));
+            leaf->setIsLeaf(true);
+            leaf->setParent(current);
+
+            if(!current->hasLeft) {
+                current->setLeftChild(leaf);
+                current->hasLeft = true;
+            }else {
+                    current->setRightChild(leaf);
+                    current->hasRight = true;
+                }
+
+        } else while(current->hasLeft & current->hasRight)
             {
-                if(representation->at(0) == '(')
-                {
-                    HuffNode * internalNode = new HuffNode();
-                    internalNode->setCharacter(representation->at(0));
-                    internalNode->setIsLeaf(false);
-                    internalNode->setParent(current);
+                if (!current->getParent()) break;
+                current = current->getParent();
+            }
+        }
 
-                    if(!current->hasLeft)
-                    {
-                        current->setLeftChild(internalNode);
-                        current->hasLeft = true;
-                    }else
-                        {
-                            current->setRightChild(internalNode);
-                            current->hasRight = true;
-                        }
+    HuffTree * tree = new HuffTree();
+    tree->setRoot(root);
+    tree->linkTree();
 
-                    current = internalNode;
+
+    QBitArray *repr[256];
+
+    for (int i = 0; i < 256; i++) {
+        repr[i] = NULL;
+
+        if (tree->getRoot()->isChild((char)i)) {
+            repr[i] = tree->codification(i);
+        }
+    }
+
+    QByteArray toSave;
+
+    int counter = 0;
+
+    int bytes = 0;
+    while (codification->size() > counter) {
+        for (int i = 0; i < 256; i++) {
+
+            if (repr[i]) {
+                QBitArray * tmp = repr[i];
+
+                bool match = true;
+
+                if ((counter + tmp->size()) > codification->size()) {
+                    continue;
                 }
 
-                if(representation->at(0) != ')' & representation->at(0)!='0')
-                {
-                    HuffNode * leaf = new HuffNode();
-                    leaf->setCharacter(representation->at(0));
-                    leaf->setIsLeaf(true);
-                    leaf->setParent(current);
-
-                    if(!current->hasLeft)
-                    {
-                        current->setLeftChild(leaf);
-                        current->hasLeft = true;
-                    }else
-                        {
-                            current->setRightChild(leaf);
-                            current->hasRight = true;
-                        }
-
-                }
-
-                if(representation->at(0) == '0')
-                {
-                    representation->remove(0,1);
-
-                    HuffNode * leaf = new HuffNode();
-                    leaf->setCharacter(representation->at(0));
-                    leaf->setIsLeaf(true);
-                    leaf->setParent(current);
-
-                    if(!current->hasLeft)
-                    {
-                        current->setLeftChild(leaf);
-                        current->hasLeft = true;
-                    }else
-                        {
-                            current->setRightChild(leaf);
-                            current->hasRight = true;
-                        }
-
-                }
-
-                representation->remove(0,1);
-
-                while(current->hasLeft & current->hasRight)
-                    {
-                        current = current->getParent();
+                for (int k = 0; k < tmp->size(); k++) {
+                    if(codification->at(counter + k) != tmp->at(k)) {
+                        match = false;
+                        break;
                     }
+                }
+
+                if (match) {
+                    bytes++;
+                    counter += tmp->size();
+                    toSave.append((char) i);
+
+                    if (bytes % (100 * 1024) == 0) {
+                        qDebug() << "descompactando ... "<< bytes / 1024 << "KB";
+                    }
+                }
 
             }
 
         }
 
-    qDebug() << "index -- >>> " << startIndex;
+    }
 
-    qDebug() << "size compacted -- >>> " << bitArray->size()/8;
+    QFile out(to);
 
-    qDebug() << "garbage size -- >>> " << garbageSize;
+    out.open(QIODevice::WriteOnly);
 
-    qDebug() << "tree size -- >>> " << treeSizeInt;
+    for (int i =0; i < toSave.size(); i++) {
+        out.putChar(toSave.at(i));
+    }
 
-    qDebug() << "name size -- >>> " << nameSizeInt;
+    out.close();
 
-    qDebug() << "name -- >>> " << nameArray->data();
-
-    qDebug() << "tree -- >>> " << treeArray->data();
-
-    qDebug() << "cod size -- >>> " << codification->size();
-
-
+    qDebug() << "Descompactado :D";
 }

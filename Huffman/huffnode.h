@@ -16,6 +16,7 @@ public:
     HuffNode * getParent();
     bool hasLeft = false;
     bool hasRight = false;
+    //verifica se um determinado caractere é filho
     bool isChild(unsigned char character);
 
     void setFrequency(int frequency);
@@ -35,6 +36,6 @@ private:
     HuffNode * m_leftChild;
     HuffNode * m_rightChild;
     bool m_childs[256];
-    bool m_isLeaf;
+    bool m_isLeaf = false;
 };
 #endif // HUFFNODE_H

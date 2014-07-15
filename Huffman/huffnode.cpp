@@ -50,6 +50,8 @@ bool HuffNode::isChild(unsigned char character)
 
 void HuffNode::child(HuffNode * node) {
 
+    if (node == NULL) return;
+
     for (int i = 0; i < 256; i++) {
         if (node->m_childs[i]) {
             this->m_childs[i] = true;
@@ -94,11 +96,13 @@ void HuffNode::setIsLeaf(bool isLeaf)
 void HuffNode::setLeftChild(HuffNode *node)
 {
     m_leftChild = node;
+    child(node);
 }
 
 void HuffNode::setRightChild(HuffNode *node)
 {
     m_rightChild = node;
+    child(node);
 }
 
 void HuffNode::setParent(HuffNode * node)

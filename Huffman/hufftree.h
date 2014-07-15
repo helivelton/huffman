@@ -23,9 +23,10 @@ public:
     QList<HuffNode*> sortList(QList<HuffNode*> list);
     //imprime a arvore(para fim de testes)
     void printTree();
+    void linkTree();
     //verifica se chegou no final da arvore
     bool reachedDeep(QList<HuffNode*> list);
-    void setRoot(HuffNode * node);
+    void setRoot(HuffNode *node);
     HuffNode * getRoot();
 
 private:

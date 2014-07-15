@@ -5,9 +5,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
-#include <QDir>
-#include <QApplication>
-#include <ui.h>
+
 void man()
 {
     qDebug()<< "---- COMPRESSOR DE HUFFMAN ----" << endl << endl;
@@ -24,68 +22,7 @@ void man()
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    UI z;
-    z.show();
-    return a.exec();
-
-    if(argc >= 2 && argc <= 5){
-
-        QString fileName, directory, compressed = "";
-
-        if(argc == 5)
-        {
-            if (argv[1][0] == '-' && argv[1][1] == 'c' && argv[3][0] == '-' && argv && argv[3][1] == 'o'){
-                fileName = argv[2];
-                compressed = argv[4];
-                HuffCompressor * compressor = new HuffCompressor(fileName, compressed, directory);
-                compressor->compress();
-            } else
-            {
-                man();
-            }
-
-        }else if(argc == 4)
-        {
-            if (argv[2][0] == '-' && argv[2][1] == 'd'){
-                fileName = argv[1];
-                directory = argv[3];
-                HuffCompressor * compressor = new HuffCompressor(fileName, compressed, directory);
-                compressor->uncompress();
-            }else
-            {
-                man();
-            }
-
-        }else if(argc == 3)
-        {
-            if (argv[1][0] == '-' && argv[1][1] == 'c')
-            {
-                fileName == argv[2];
-                QStringList list = fileName.split(".");
-                compressed.append(list.at(0));
-                compressed.append(".huff");
-                HuffCompressor * compressor = new HuffCompressor(fileName, compressed, directory);
-                compressor->compress();
-            }else
-            {
-                man();
-            }
-        }else if(argc == 2)
-        {
-            fileName = argv[1];
-            HuffCompressor * compressor = new HuffCompressor(fileName, compressed, directory);
-            compressor->uncompress();
-        }else {
-            man();
-        }
-    }
-
-
-    //HuffCompressor * compressor = new HuffCompressor();
-
-    // compressor->compress("/home/paulinha/Downloads/tela-preta.png");
-
-    //compressor->uncompress("/home/paulinha/compactado.huff");
-
+    HuffCompressor * compressor = new HuffCompressor();
+    //compressor->compress("/home/paulinha/Downloads/tela.png", "/home/paulinha/Desktop/tela.huff");
+    compressor->uncompress("/home/paulinha/Desktop/tela.huff", "/home/paulinha/Desktop/tela.png");
 }
