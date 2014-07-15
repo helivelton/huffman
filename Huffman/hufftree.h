@@ -36,6 +36,7 @@ private:
     int * m_frequencyArray;
     //gera a representacao da arvore de forma recursiva
     void representationRecursive(HuffNode *node, QByteArray * array);
+    void link(HuffNode * node);
 };
 
 #endif // HUFFTREE_H

@@ -36,5 +36,5 @@ int main(int argc, char *argv[])
     gui(argc,argv);
     HuffCompressor * compressor = new HuffCompressor();
     //compressor->compress("/home/paulinha/Downloads/tela.png", "/home/paulinha/Desktop/tela.huff");
-    compressor->uncompress("/home/paulinha/Desktop/tela.huff", "/home/paulinha/Desktop/tela.png");
+    //compressor->uncompress("/home/paulinha/Desktop/tela.huff", "/home/paulinha/Desktop/tela.png");
 }

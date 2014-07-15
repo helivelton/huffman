@@ -33,3 +33,6 @@ HEADERS += \
 
 FORMS += \
     userinterface.ui
+
+RESOURCES += \
+    huffman.qrc

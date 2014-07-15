@@ -163,7 +163,7 @@ void HuffCompressor::compress(QString from, QString to)
 
         if (arr[i] > 0)
         {
-            bitArray[(unsigned char)i] = arvore->codification(i);
+            bitArray[i] = arvore->codification(i);
         }
     }
 
@@ -205,7 +205,6 @@ void HuffCompressor::compress(QString from, QString to)
     for(int i =0;i<fileInBytes->size();i++)
     {
         file.putChar(fileInBytes->at(i));
-
     }
 
     QByteArray fileName;
@@ -234,20 +233,14 @@ void HuffCompressor::compress(QString from, QString to)
 }
 
 void HuffCompressor::uncompress(QString from, QString to)
-
 {
-
     QFile file(from);
-
 
     file.open(QIODevice::ReadOnly);
 
-
     QByteArray byteArray = file.readAll();
 
-
     QBitArray * bitArray = QbyteArrayToQBitArray(byteArray);
-
 
     QBitArray * garbSize = new QBitArray();
 
@@ -404,7 +397,6 @@ void HuffCompressor::uncompress(QString from, QString to)
     tree->setRoot(root);
     tree->linkTree();
 
-
     QBitArray *repr[256];
 
     for (int i = 0; i < 256; i++) {
@@ -448,20 +440,17 @@ void HuffCompressor::uncompress(QString from, QString to)
                         qDebug() << "descompactando ... "<< bytes / 1024 << "KB";
                     }
                 }
-
             }
-
         }
-
     }
 
-    QString nameString;
+//    QString nameString;
 
-    for(int i=0;i<nameArray->size();++i)
-    {
-        nameString.append(nameArray->at(i));
-    }
-    to.append(nameString);
+//    for(int i=0;i<nameArray->size();++i)
+//    {
+//        nameString.append(nameArray->at(i));
+//    }
+//    to.append(nameString);
     QFile out(to);
 
 

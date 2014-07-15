@@ -113,7 +113,9 @@ QList<HuffNode*> HuffTree::sortList(QList<HuffNode*> list)
     return sortedList;
 }
 
-void link(HuffNode * node) {
+
+//associa os nós
+void HuffTree::link(HuffNode * node) {
     if (node->hasLeft) {
         link(node->leftChild());
     }
@@ -218,13 +220,13 @@ bool HuffTree::reachedDeep(QList<HuffNode *> list)
     return true;
 }
 
+
 void HuffTree::representationRecursive(HuffNode *node, QByteArray * array) {
 
     if (node->isLeaf()) {
         if (node->character() == 0 || node->character() == '(' || node->character() == ')') {
             array->append((char)0);
         }
-
         array->append(node->character());
     } else {
         bool noLeaf = !node->leftChild()->isLeaf();
