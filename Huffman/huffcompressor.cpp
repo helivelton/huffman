@@ -455,7 +455,15 @@ void HuffCompressor::uncompress(QString from, QString to)
 
     }
 
+    QString nameString;
+
+    for(int i=0;i<nameArray->size();++i)
+    {
+        nameString.append(nameArray->at(i));
+    }
+    to.append(nameString);
     QFile out(to);
+
 
     out.open(QIODevice::WriteOnly);
 

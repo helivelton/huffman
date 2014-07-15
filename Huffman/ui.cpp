@@ -44,10 +44,23 @@ void UI::on_compressButton_clicked()
     directory = directory.remove(fileInfo.fileName(),Qt::CaseSensitive);
     QString compressed = "";
 
+}
 
-    HuffCompressor * compressor = new HuffCompressor(m_selectedFile, compressed, directory);
-    compressor->compress();
-    qDebug() << m_selectedFile;
-    qDebug() << compressed;
-    qDebug() << directory;
+
+
+
+void UI::on_uncompressRadio_clicked()
+{
+    ui->actionButton->setText("Des");
+}
+
+
+void UI::on_compressRadio_clicked()
+{
+    ui->actionButton->setText("Comprimir");
+}
+
+void UI::on_actionButton_clicked()
+{
+    ui->actionButton->setText("teste");
 }

@@ -5,6 +5,8 @@
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
+#include <QApplication>
+#include <userinterface.h>
 
 void man()
 {
@@ -20,8 +22,18 @@ void man()
     qDebug()<< "-------------------------------";
 }
 
+int gui(int argc, char *argv[])
+{
+    QApplication app(argc,argv);
+    UserInterface userInterface;
+    userInterface.show();
+
+    return app.exec();
+}
+
 int main(int argc, char *argv[])
 {
+    gui(argc,argv);
     HuffCompressor * compressor = new HuffCompressor();
     //compressor->compress("/home/paulinha/Downloads/tela.png", "/home/paulinha/Desktop/tela.huff");
     compressor->uncompress("/home/paulinha/Desktop/tela.huff", "/home/paulinha/Desktop/tela.png");

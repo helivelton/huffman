@@ -15,8 +15,8 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QTreeView>
@@ -29,9 +29,10 @@ class Ui_UI
 public:
     QWidget *centralwidget;
     QTreeView *directoryTree;
-    QPushButton *compressButton;
+    QPushButton *actionButton;
     QTextEdit *futureFileName;
-    QMenuBar *menubar;
+    QRadioButton *compressRadio;
+    QRadioButton *uncompressRadio;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *UI)
@@ -44,17 +45,19 @@ public:
         directoryTree = new QTreeView(centralwidget);
         directoryTree->setObjectName(QStringLiteral("directoryTree"));
         directoryTree->setGeometry(QRect(20, 61, 441, 241));
-        compressButton = new QPushButton(centralwidget);
-        compressButton->setObjectName(QStringLiteral("compressButton"));
-        compressButton->setGeometry(QRect(490, 140, 75, 23));
+        actionButton = new QPushButton(centralwidget);
+        actionButton->setObjectName(QStringLiteral("actionButton"));
+        actionButton->setGeometry(QRect(480, 170, 91, 31));
         futureFileName = new QTextEdit(centralwidget);
         futureFileName->setObjectName(QStringLiteral("futureFileName"));
         futureFileName->setGeometry(QRect(480, 70, 104, 21));
+        compressRadio = new QRadioButton(centralwidget);
+        compressRadio->setObjectName(QStringLiteral("compressRadio"));
+        compressRadio->setGeometry(QRect(110, 20, 91, 31));
+        uncompressRadio = new QRadioButton(centralwidget);
+        uncompressRadio->setObjectName(QStringLiteral("uncompressRadio"));
+        uncompressRadio->setGeometry(QRect(240, 20, 131, 31));
         UI->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(UI);
-        menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 597, 21));
-        UI->setMenuBar(menubar);
         statusbar = new QStatusBar(UI);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         UI->setStatusBar(statusbar);
@@ -67,7 +70,9 @@ public:
     void retranslateUi(QMainWindow *UI)
     {
         UI->setWindowTitle(QApplication::translate("UI", "MainWindow", 0));
-        compressButton->setText(QApplication::translate("UI", "Comprimir", 0));
+        actionButton->setText(QApplication::translate("UI", "Comprimir", 0));
+        compressRadio->setText(QApplication::translate("UI", "Compress\303\243o", 0));
+        uncompressRadio->setText(QApplication::translate("UI", "Descompress\303\243o", 0));
     } // retranslateUi
 
 };

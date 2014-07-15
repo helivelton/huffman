@@ -22,14 +22,14 @@ SOURCES += main.cpp \
     hufftree.cpp \
     huffnode.cpp \
     huffcompressor.cpp \
-    ui.cpp
+    userinterface.cpp
 
 HEADERS += \
     fileprocessor.h \
     hufftree.h \
     huffnode.h \
     huffcompressor.h \
-    ui.h
+    userinterface.h
 
 FORMS += \
-    ui.ui
+    userinterface.ui

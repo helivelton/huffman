@@ -25,6 +25,14 @@ private slots:
 
     void on_compressButton_clicked();
 
+    void on_radioButton_clicked();
+
+    void on_compressRadio_clicked();
+
+    void on_uncompressRadio_clicked();
+
+    void on_actionButton_clicked();
+
 private:
     Ui::UI *ui;
     QFileSystemModel * dirmodel;
